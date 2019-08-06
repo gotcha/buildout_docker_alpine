@@ -1,0 +1,8 @@
+---
+platform: linux
+
+inputs:
+  - name: git-buildout-image
+
+run:
+  path: git-buildout-image/ci/pipelines/scripts/buildout_version.sh

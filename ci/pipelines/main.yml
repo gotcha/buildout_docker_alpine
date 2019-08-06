@@ -1,0 +1,38 @@
+---
+jobs:
+- name: buildout-image
+  old_name: build-docker-image
+  public: true
+  plan:
+  - get: git-buildout-image
+    trigger: true
+  - put: buildout-image
+    params:
+      build: git-buildout-image
+- name: run-buildout
+  public: true
+  plan:
+  - in_parallel:
+    - get: git-pipeline-helpers
+    - get: buildout-image
+      passed: [buildout-image]
+      trigger: true
+  - task: run-buildout
+    image: buildout-image
+    file: git-buildout-image/ci/pipelines/buildout_version.yml
+
+resources:
+- name: git-buildout-image
+  icon: git
+  type: git
+  source:
+    uri: https://github.com/gotcha/buildout_docker_alpine.git
+    branch: master
+
+- name: buildout-image
+  icon: docker
+  type: docker-image
+  source:
+    repository: registry:5000/gotcha/buildout-docker-alpine
+    insecure_registries: 
+    - "registry:5000"
