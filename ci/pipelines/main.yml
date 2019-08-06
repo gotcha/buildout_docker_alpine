@@ -13,7 +13,7 @@ jobs:
   public: true
   plan:
   - in_parallel:
-    - get: git-pipeline-helpers
+    - get: git-buildout-image 
     - get: buildout-image
       passed: [buildout-image]
       trigger: true
