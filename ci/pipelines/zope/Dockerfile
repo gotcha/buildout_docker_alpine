@@ -1,4 +1,4 @@
-FROM gotcha/buildout_docker_alpine as builder
+FROM registry:5000/gotcha/buildout_docker_alpine as builder
 
 RUN apk add --no-cache --virtual .build-deps \
   git \
