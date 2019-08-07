@@ -19,6 +19,7 @@ RUN apk add --no-cache --virtual .run-deps \
 RUN addgroup -g 500 zope \
   && adduser -S -D -G zope -u 500 zope -h /zope/instance
 COPY --chown=zope --from=builder /zope/instance .
+COPY --from=builder /usr/local/lib/python2.7/site-packages /usr/local/lib/python2.7/site-packages
 COPY docker-initialize.py docker-entrypoint.sh /
 
 USER zope
