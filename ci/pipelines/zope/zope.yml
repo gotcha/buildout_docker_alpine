@@ -31,6 +31,7 @@ jobs:
         trigger: true
       - put: zope-image
         params:
+          load_base: registry:5000/gotcha/buildout_docker_alpine
           build: git-buildout-image/ci/pipelines/zope
   - name: start-zope
     public: true
