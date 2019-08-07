@@ -1,0 +1,34 @@
+---
+resources:
+  - name: git-buildout-image
+    icon: git
+    type: git
+    source:
+      uri: https://github.com/gotcha/buildout_docker_alpine.git
+      branch: concourse/zope 
+  - name: buildout-image
+    icon: docker
+    type: docker-image
+    source:
+      repository: registry:5000/gotcha/buildout-docker-alpine
+      insecure_registries: 
+        - "registry:5000"
+  - name: zope-image
+    icon: docker
+    type: docker-image
+    source:
+      repository: registry:5000/gotcha/zope-alpine
+      insecure_registries: 
+        - "registry:5000"
+
+jobs:
+  - name: zope-image
+    public: true
+    plan:
+    - get: git-buildout-image
+      trigger: true
+    - get: buildout-image
+      trigger: true
+    - put: zope-image
+      params:
+        build: git-buildout-image/pipelines/zope
