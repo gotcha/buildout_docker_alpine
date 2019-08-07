@@ -43,6 +43,8 @@ jobs:
       - task: start-zope
         image: zope-image
         config:
+          inputs:
+            - name: git-buildout-image
           platform: linux
           run:
             path: git-buildout-image/ci/pipelines/zope/test.sh
