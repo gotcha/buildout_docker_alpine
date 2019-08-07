@@ -32,3 +32,15 @@ jobs:
     - put: zope-image
       params:
         build: git-buildout-image/ci/pipelines/zope
+  - name: start-zope
+    public: true
+    plan:
+    - in_parallel:
+      - get: git-buildout-image
+      - get: zope-image
+        passed: [zope-image]
+        trigger: true
+    - task: start-zope
+      image: zope-image
+      run:
+        path: git-buildout-image/ci/pipelines/zope/test.sh
