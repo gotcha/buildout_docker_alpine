@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # TODO: kill zope before exit
 MAX=${1:-30}
-nohup bin/instance fg &
+nohup /zope/bin/instance fg &
 c=0
 while ! grep -s -q 'Zope Ready to handle requests' nohup.out; do
 	sleep 1
