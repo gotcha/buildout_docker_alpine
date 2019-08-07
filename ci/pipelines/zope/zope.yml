@@ -25,22 +25,26 @@ jobs:
   - name: zope-image
     public: true
     plan:
-    - get: git-buildout-image
-      trigger: true
-    - get: buildout-image
-      trigger: true
-    - put: zope-image
-      params:
-        build: git-buildout-image/ci/pipelines/zope
+      - get: git-buildout-image
+        trigger: true
+      - get: buildout-image
+        trigger: true
+      - put: zope-image
+        params:
+          build: git-buildout-image/ci/pipelines/zope
   - name: start-zope
     public: true
     plan:
-    - in_parallel:
-      - get: git-buildout-image
-      - get: zope-image
-        passed: [zope-image]
-        trigger: true
-    - task: start-zope
-      image: zope-image
-      run:
-        path: git-buildout-image/ci/pipelines/zope/test.sh
+      - in_parallel:
+        - get: git-buildout-image
+        - get: zope-image
+          passed: [zope-image]
+          trigger: true
+      - task: start-zope
+        image: zope-image
+          config:
+            platform: linux
+            run:
+              path: git-buildout-image/ci/pipelines/zope/test.sh
+        run:
+          path: git-buildout-image/ci/pipelines/zope/test.sh
