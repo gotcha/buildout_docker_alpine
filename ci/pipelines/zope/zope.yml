@@ -42,9 +42,7 @@ jobs:
           trigger: true
       - task: start-zope
         image: zope-image
-          config:
-            platform: linux
-            run:
-              path: git-buildout-image/ci/pipelines/zope/test.sh
-        run:
-          path: git-buildout-image/ci/pipelines/zope/test.sh
+        config:
+          platform: linux
+          run:
+            path: git-buildout-image/ci/pipelines/zope/test.sh
