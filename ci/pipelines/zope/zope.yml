@@ -3,6 +3,7 @@ resources:
   - name: git-buildout-image
     icon: git
     type: git
+    check_every: 10s
     source:
       uri: https://github.com/gotcha/buildout_docker_alpine.git
       branch: concourse/zope 
@@ -20,19 +21,41 @@ resources:
       repository: registry:5000/gotcha/zope-alpine
       insecure_registries: 
         - "registry:5000"
-
+  - name: zope-image-builder
+    icon: docker
+    type: docker-image
+    source:
+      repository: registry:5000/gotcha/zope-alpine-builder
+      insecure_registries: 
+        - "registry:5000"
 jobs:
   - name: zope-image
     public: true
     plan:
-      - get: git-buildout-image
-        trigger: true
-      - get: buildout-image
-        trigger: true
-      - put: zope-image
-        params:
-          load_base: registry:5000/gotcha/buildout_docker_alpine
-          build: git-buildout-image/ci/pipelines/zope
+      - in_parallel:
+          - get: git-buildout-image
+            trigger: true
+          - get: buildout-image
+            params:
+              save: true
+            trigger: true
+          - get: zope-image-builder
+            params:
+              save: true
+      - in_parallel:
+          - put: zope-image
+            params:
+              cache_from:
+                - zope-image-builder
+              load_base: buildout-image
+              build: git-buildout-image/ci/pipelines/zope
+          - put: zope-image-builder
+            params:
+              cache_from:
+                - zope-image-builder
+              load_base: buildout-image
+              build: git-buildout-image/ci/pipelines/zope
+              target_name: builder
   - name: start-zope
     public: true
     plan:
@@ -41,6 +64,8 @@ jobs:
         - get: zope-image
           passed: [zope-image]
           trigger: true
+          params:
+            save: true
       - task: start-zope
         image: zope-image
         config:
@@ -49,3 +74,7 @@ jobs:
           platform: linux
           run:
             path: git-buildout-image/ci/pipelines/zope/test.sh
+      - put: zope-image
+        params:
+          load: zope-image
+          tag_as_latest: true
