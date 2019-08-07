@@ -31,4 +31,4 @@ jobs:
       trigger: true
     - put: zope-image
       params:
-        build: git-buildout-image/pipelines/zope
+        build: git-buildout-image/ci/pipelines/zope
