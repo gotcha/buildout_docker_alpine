@@ -4,3 +4,6 @@ fly:
 update: fly
 	./fly -t buildout-ci set-pipeline -c main.yml -p buildout
 	./fly -t buildout-ci unpause-pipeline -p buildout
+
+up:
+	docker-compose up -d
