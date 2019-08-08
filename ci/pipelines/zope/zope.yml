@@ -29,6 +29,21 @@ resources:
       insecure_registries: 
         - "registry:5000"
 jobs:
+  - name: zope-image-builder
+    public: true
+    plan:
+      - in_parallel:
+          - get: git-buildout-image
+            trigger: true
+          - get: buildout-image
+            params:
+              save: true
+            trigger: true
+      - put: zope-image-builder
+        params:
+          load_base: buildout-image
+          build: git-buildout-image/ci/pipelines/zope
+          target_name: builder
   - name: zope-image
     public: true
     plan:
@@ -40,6 +55,7 @@ jobs:
               save: true
             trigger: true
           - get: zope-image-builder
+            passed: [zope-image-builder]
             params:
               save: true
       - in_parallel:
