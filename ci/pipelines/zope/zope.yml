@@ -80,8 +80,9 @@ jobs:
       - put: zope-image
         params:
           cache_from:
-            - zope-image-builder
             - python-image
+            - zope-image-builder
+            - zope-image
           load_base: buildout-image
           build: git-buildout-image/ci/pipelines/zope
       - put: zope-image-builder
@@ -89,7 +90,6 @@ jobs:
           cache_from:
             - python-image
             - zope-image-builder
-            - zope-image
           load_base: buildout-image
           build: git-buildout-image/ci/pipelines/zope
           target_name: builder
