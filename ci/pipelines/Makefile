@@ -11,3 +11,6 @@ update: fly
 
 up:
 	docker-compose up -d
+
+start: update
+	./fly -t buildout-ci trigger-job --job zope/zope-image-bootstrap
