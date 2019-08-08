@@ -57,20 +57,19 @@ jobs:
             passed: [zope-image-builder]
             params:
               save: true
-      - in_parallel:
-          - put: zope-image
-            params:
-              cache_from:
-                - zope-image-builder
-              load_base: buildout-image
-              build: git-buildout-image/ci/pipelines/zope
-          - put: zope-image-builder
-            params:
-              cache_from:
-                - zope-image-builder
-              load_base: buildout-image
-              build: git-buildout-image/ci/pipelines/zope
-              target_name: builder
+      - put: zope-image
+        params:
+          cache_from:
+            - zope-image-builder
+          load_base: buildout-image
+          build: git-buildout-image/ci/pipelines/zope
+      - put: zope-image-builder
+        params:
+          cache_from:
+            - zope-image-builder
+          load_base: buildout-image
+          build: git-buildout-image/ci/pipelines/zope
+          target_name: builder
   - name: start-zope
     public: true
     plan:
