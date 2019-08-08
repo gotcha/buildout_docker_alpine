@@ -12,4 +12,4 @@ while ! grep -s -q 'Zope Ready to handle requests' "$HOME/nohup.out"; do
 		exit 1
 	fi
 done
-echo "OK"
+echo "OK: Zope Ready to handle requests"
