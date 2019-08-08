@@ -38,7 +38,6 @@ jobs:
           - get: buildout-image
             params:
               save: true
-            trigger: true
       - put: zope-image-builder
         params:
           load_base: buildout-image
