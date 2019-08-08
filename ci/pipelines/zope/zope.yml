@@ -34,7 +34,6 @@ jobs:
     plan:
       - in_parallel:
           - get: git-buildout-image
-            trigger: true
           - get: buildout-image
             params:
               save: true
