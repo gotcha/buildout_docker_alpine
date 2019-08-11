@@ -3,16 +3,16 @@ resources:
   - name: git-buildout-image
     icon: git
     type: git
-    check_every: 10s
+    check_every: 600s
     source:
       uri: https://github.com/gotcha/buildout_docker_alpine.git
-      branch: concourse/zope 
+      branch: concourse/zope
   - name: buildout-image
     icon: docker
     type: docker-image
     source:
       repository: registry:5000/gotcha/buildout-docker-alpine
-      insecure_registries: 
+      insecure_registries:
         - "registry:5000"
   - name: python-image
     icon: docker
@@ -25,14 +25,14 @@ resources:
     type: docker-image
     source:
       repository: registry:5000/gotcha/zope-alpine
-      insecure_registries: 
+      insecure_registries:
         - "registry:5000"
   - name: zope-image-builder
     icon: docker
     type: docker-image
     source:
       repository: registry:5000/gotcha/zope-alpine-builder
-      insecure_registries: 
+      insecure_registries:
         - "registry:5000"
 jobs:
   - name: zope-image-bootstrap
@@ -56,6 +56,7 @@ jobs:
         params:
           load_base: buildout-image
           build: git-buildout-image/ci/pipelines/zope
+          tag_as_latest: true
   - name: zope-image
     public: true
     plan:
@@ -77,22 +78,25 @@ jobs:
             passed: [zope-image-bootstrap]
             params:
               save: true
-      - put: zope-image
-        params:
-          cache_from:
-            - python-image
-            - zope-image-builder
-            - zope-image
-          load_base: buildout-image
-          build: git-buildout-image/ci/pipelines/zope
-      - put: zope-image-builder
-        params:
-          cache_from:
-            - python-image
-            - zope-image-builder
-          load_base: buildout-image
-          build: git-buildout-image/ci/pipelines/zope
-          target_name: builder
+      - in_parallel:
+          - put: zope-image-builder
+            params:
+              cache_from:
+                - python-image
+                - zope-image-builder
+              load_base: buildout-image
+              build: git-buildout-image/ci/pipelines/zope
+              target_name: builder
+          - put: zope-image
+            params:
+              cache: true
+              cache_tag: latest
+              cache_from:
+                - python-image
+                - zope-image-builder
+                - zope-image
+              load_base: buildout-image
+              build: git-buildout-image/ci/pipelines/zope
   - name: start-zope
     public: true
     plan:
