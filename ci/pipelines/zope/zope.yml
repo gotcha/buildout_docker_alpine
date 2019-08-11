@@ -52,6 +52,7 @@ jobs:
           load_base: buildout-image
           build: git-buildout-image/ci/pipelines/zope
           target_name: builder
+          tag_as_latest: true
       - put: zope-image
         params:
           load_base: buildout-image
@@ -81,6 +82,8 @@ jobs:
       - in_parallel:
           - put: zope-image-builder
             params:
+              cache: true
+              cache_tag: latest
               cache_from:
                 - python-image
                 - zope-image-builder
@@ -107,6 +110,10 @@ jobs:
           trigger: true
           params:
             save: true
+        - get: zope-image-builder
+          passed: [zope-image]
+          params:
+            save: true
       - task: start-zope
         image: zope-image
         config:
@@ -117,5 +124,20 @@ jobs:
             path: git-buildout-image/ci/pipelines/zope/test.sh
       - put: zope-image
         params:
+          cache: true
+          cache_tag: latest
+          cache_from:
+            - python-image
+            - zope-image-builder
+            - zope-image
           load: zope-image
+          tag_as_latest: true
+      - put: zope-image-builder
+        params:
+          cache: true
+          cache_tag: latest
+          cache_from:
+            - python-image
+            - zope-image-builder
+          load: zope-image-builder
           tag_as_latest: true
