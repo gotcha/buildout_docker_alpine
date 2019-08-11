@@ -13,7 +13,7 @@ jobs:
   public: true
   plan:
   - in_parallel:
-    - get: git-buildout-image 
+    - get: git-buildout-image
     - get: buildout-image
       passed: [buildout-image]
       trigger: true
@@ -34,5 +34,5 @@ resources:
   type: docker-image
   source:
     repository: registry:5000/gotcha/buildout-docker-alpine
-    insecure_registries: 
+    insecure_registries:
     - "registry:5000"
