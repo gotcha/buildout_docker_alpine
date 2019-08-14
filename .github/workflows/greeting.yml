@@ -17,4 +17,4 @@ jobs:
       with:
         entrypoint: buildout
         args: --version
-    - run: ls -al ${GITHUB_WORKSPACE}
+    - run: docker-compose -f ${GITHUB_WORKSPACE}/ci/docker-compose.yml up -d
