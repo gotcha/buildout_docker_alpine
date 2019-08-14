@@ -18,3 +18,5 @@ jobs:
         entrypoint: buildout
         args: --version
     - run: docker-compose -f ${GITHUB_WORKSPACE}/ci/docker-compose.yml up -d
+    - run: cd ${GITHUB_WORKSPACE}/ci/pipelines
+           make start
