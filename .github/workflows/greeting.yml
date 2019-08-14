@@ -17,5 +17,4 @@ jobs:
       with:
         entrypoint: buildout
         args: --version
-    - run: apt install docker-compose
-    - run: docker-compose /workspace/ci/docker-compose.yml up -d
+    - run: docker-compose --version
