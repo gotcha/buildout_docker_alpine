@@ -12,3 +12,8 @@ jobs:
     - uses: actions/checkout@v1
     # This step prints the time.
     - run: echo "The time was $(date)"
+    - name: say hi
+      uses: gotcha/buildout_docker_alpine
+      with:
+        entrypoint: buildout
+        args: --version
