@@ -1,22 +1,17 @@
-name: Greet Everybody
-# This workflow is triggered on pushes to the repository.
+name: Fun with concourse
 on: [push]
 
 jobs:
   build:
-    # Job name is Greeting
-    name: Greeting
-    # This job runs on Linux
+    name: Concourse
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v1
-    # This step prints the time.
-    - run: echo "The time was $(date)"
-    - name: say hi
-      uses: docker://gotcha/buildout_docker_alpine
-      with:
-        entrypoint: buildout
-        args: --version
-    - run: docker-compose -f ${GITHUB_WORKSPACE}/ci/docker-compose.yml up -d
-    - run: cd ${GITHUB_WORKSPACE}/ci/pipelines; make start
-    - run: cd ${GITHUB_WORKSPACE}/ci/pipelines; ./fly -t buildout-ci w --job=zope/zope-image-bootstrap
+    - name: Start concourse
+      run: docker-compose -f ${GITHUB_WORKSPACE}/ci/docker-compose.yml up -d
+    - name: Launch job
+      working-directory: ${GITHUB_WORKSPACE}
+      run: make start
+    - name: Watch job
+      working-directory: ${GITHUB_WORKSPACE}
+      run: ./fly -t buildout-ci w --job=zope/zope-image-bootstrap
