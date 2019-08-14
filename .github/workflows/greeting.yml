@@ -6,7 +6,8 @@ jobs:
     name: Concourse
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v1
+    - name: Checkout
+      uses: actions/checkout@v1
     - name: Start concourse
       run: docker-compose -f ${GITHUB_WORKSPACE}/ci/docker-compose.yml up -d
     - name: Launch job
