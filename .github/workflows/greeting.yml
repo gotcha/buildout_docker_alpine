@@ -11,4 +11,4 @@ jobs:
     steps:
     - uses: actions/checkout@v1
     # This step prints the time.
-    - run: echo "The time was ${{ steps.hello.outputs.time }}"
+    - run: echo "The time was $(date)"
