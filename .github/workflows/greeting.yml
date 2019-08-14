@@ -11,8 +11,8 @@ jobs:
     - name: Start concourse
       run: docker-compose -f ${GITHUB_WORKSPACE}/ci/docker-compose.yml up -d
     - name: Launch job
-      working-directory: ${GITHUB_WORKSPACE}
+      working-directory: ci/pipelines
       run: make start
     - name: Watch job
-      working-directory: ${GITHUB_WORKSPACE}
+      working-directory: ci/pipelines
       run: ./fly -t buildout-ci w --job=zope/zope-image-bootstrap
