@@ -17,4 +17,4 @@ jobs:
       with:
         entrypoint: buildout
         args: --version
-    - run: docker-compose --version
+    - run: ls -al ${GITHUB_WORKSPACE}
