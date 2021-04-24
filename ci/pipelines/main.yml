@@ -27,7 +27,7 @@ resources:
   type: git
   source:
     uri: https://github.com/gotcha/buildout_docker_alpine.git
-    branch: master
+    branch: ghactions
 
 - name: buildout-image
   icon: docker
